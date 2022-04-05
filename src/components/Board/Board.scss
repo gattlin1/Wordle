@@ -1,0 +1,12 @@
+.board {
+  padding: 30px;
+  width: 50%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+
+  .guess {
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
