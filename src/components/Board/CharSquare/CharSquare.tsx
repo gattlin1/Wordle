@@ -2,7 +2,7 @@ import React from 'react';
 import './CharSquare.scss';
 
 interface CharSquareProps {
-  char: string;
+  char: string | undefined;
 }
 
 function CharSquare({ char }: CharSquareProps) {
