@@ -1,13 +1,19 @@
-import React from 'react';
-import { WordleProps } from '../../Interfaces/interfaces';
+import React, { useEffect, Dispatch, SetStateAction } from 'react';
 import './Keyboard.scss';
+
+interface KeyboardProps {
+  guesses: string[];
+  setGuesses: Dispatch<SetStateAction<string[]>>;
+  guessCount: number;
+  setGuessCount: Dispatch<SetStateAction<number>>;
+}
 
 function Keyboard({
   guesses,
   setGuesses,
   guessCount,
   setGuessCount,
-}: WordleProps) {
+}: KeyboardProps) {
   // prettier-ignore
   const keyboardKeys = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -15,7 +21,25 @@ function Keyboard({
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter', 'Backspace']
   ];
 
-  const handleKeyboardInput = (key: string) => {
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyboardInput);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyboardInput);
+    };
+  });
+
+  const handleKeyboardInput = (event: any) => {
+    const key: string = event.key;
+
+    if (key === 'Enter' || key === 'Backspace') {
+      handleInput(key);
+    } else if (keyboardKeys.flat().includes(key.toUpperCase())) {
+      handleInput(key.toUpperCase());
+    }
+  };
+
+  const handleInput = (key: string) => {
     let currentGuess = guesses[guessCount];
 
     if (key === 'Enter' && currentGuess.length === 5) {
@@ -54,7 +78,8 @@ function Keyboard({
     return (
       <div
         className={keyClasses.join(' ')}
-        onClick={() => handleKeyboardInput(key)}
+        onClick={() => handleInput(key)}
+        key={key}
       >
         {kbkey}
       </div>
@@ -62,8 +87,8 @@ function Keyboard({
   };
   return (
     <div className='keyboard'>
-      {keyboardKeys.map((keyboardRow) => (
-        <div className='row'>
+      {keyboardKeys.map((keyboardRow, i) => (
+        <div className='row' key={i}>
           {keyboardRow.map((key) => createKeyboardKey(key))}
         </div>
       ))}
