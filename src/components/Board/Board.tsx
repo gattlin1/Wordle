@@ -22,11 +22,11 @@ function Board({
     const keyCode = event.keyCode;
     let currentGuess = guesses[guessCount];
 
-    if (key === 'Backspace') {
-      if (currentGuess.length > 0) {
-        currentGuess = currentGuess.slice(0, -1);
-        updatedGuesses(currentGuess);
-      }
+    if (key === 'Enter' && currentGuess.length === 5) {
+      setGuessCount(guessCount + 1);
+    } else if (key === 'Backspace' && currentGuess.length > 0) {
+      currentGuess = currentGuess.slice(0, -1);
+      updatedGuesses(currentGuess);
     } else if (
       // Check to see if input is a letter.
       (keyCode >= 65 && keyCode <= 90) ||
@@ -36,8 +36,6 @@ function Board({
         currentGuess += key.toUpperCase();
         updatedGuesses(currentGuess);
       }
-    } else if (key === 'Enter' && currentGuess.length === 5) {
-      setGuessCount(guessCount + 1);
     }
   };
 
