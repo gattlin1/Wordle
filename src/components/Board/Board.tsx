@@ -26,22 +26,20 @@ function Board({
       setGuessCount(guessCount + 1);
     } else if (key === 'Backspace' && currentGuess.length > 0) {
       currentGuess = currentGuess.slice(0, -1);
-      updatedGuesses(currentGuess);
+      updateGuesses(currentGuess);
     } else if (
       // Check to see if input is a letter.
-      (keyCode >= 65 && keyCode <= 90) ||
-      (keyCode >= 97 && keyCode <= 122)
+      ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) &&
+      currentGuess.length < 5
     ) {
-      if (currentGuess.length < 5) {
-        currentGuess += key.toUpperCase();
-        updatedGuesses(currentGuess);
-      }
+      currentGuess += key.toUpperCase();
+      updateGuesses(currentGuess);
     }
   };
 
-  const updatedGuesses = (word: string) => {
+  const updateGuesses = (guess: string) => {
     const tempGuesses = guesses.slice();
-    tempGuesses.splice(guessCount, 1, word);
+    tempGuesses.splice(guessCount, 1, guess);
     setGuesses(tempGuesses);
   };
 

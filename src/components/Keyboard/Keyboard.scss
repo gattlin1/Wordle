@@ -1,6 +1,26 @@
+@import '@fortawesome/fontawesome-free/css/all.css';
+
 .keyboard {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
   max-width: 500px;
   color: white;
+
+  .row {
+    display: flex;
+    justify-content: center;
+
+    .key {
+      background-color: green;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .backspace,
+    .enter {
+      flex-grow: 1;
+    }
+  }
 }
