@@ -5,21 +5,22 @@ import Keyboard from './components/Keyboard/Keyboard';
 
 function App() {
   const [guesses, setGuesses] = useState(['', '', '', '', '']);
-  let [guessCount, setGuessCount] = useState(0);
+  const [guessCount, setGuessCount] = useState(0);
+  const gameState = {
+    guesses: guesses,
+    setGuesses: setGuesses,
+    guessCount: guessCount,
+    setGuessCount: setGuessCount,
+  };
 
   return (
     <div className='App'>
       <header>Wordle</header>
       <div className='board-container'>
-        <Board
-          guesses={guesses}
-          setGuesses={setGuesses}
-          guessCount={guessCount}
-          setGuessCount={setGuessCount}
-        />
+        <Board {...gameState} />
       </div>
       <div className='keyboard-container'>
-        <Keyboard />
+        <Keyboard {...gameState} />
       </div>
     </div>
   );

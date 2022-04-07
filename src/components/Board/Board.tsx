@@ -1,15 +1,14 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CharSquare from './CharSquare/CharSquare';
+import { WordleProps } from '../../Interfaces/interfaces';
 import './Board.scss';
 
-interface BoardProps {
-  guesses: string[];
-  setGuesses: Dispatch<SetStateAction<string[]>>;
-  guessCount: number;
-  setGuessCount: Dispatch<SetStateAction<number>>;
-}
-
-function Board({ guesses, setGuesses, guessCount, setGuessCount }: BoardProps) {
+function Board({
+  guesses,
+  setGuesses,
+  guessCount,
+  setGuessCount,
+}: WordleProps) {
   useEffect(() => {
     document.addEventListener('keydown', handleKeyboardInput);
 
@@ -21,7 +20,6 @@ function Board({ guesses, setGuesses, guessCount, setGuessCount }: BoardProps) {
   const handleKeyboardInput = (event: any) => {
     const key: string = event.key;
     const keyCode = event.keyCode;
-
     let currentGuess = guesses[guessCount];
 
     if (key === 'Backspace') {
@@ -29,16 +27,16 @@ function Board({ guesses, setGuesses, guessCount, setGuessCount }: BoardProps) {
         currentGuess = currentGuess.slice(0, -1);
         updatedGuesses(currentGuess);
       }
-    }
-    // Check to see if input is a letter.
-    if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) {
+    } else if (
+      // Check to see if input is a letter.
+      (keyCode >= 65 && keyCode <= 90) ||
+      (keyCode >= 97 && keyCode <= 122)
+    ) {
       if (currentGuess.length < 5) {
         currentGuess += key.toUpperCase();
         updatedGuesses(currentGuess);
       }
-    }
-
-    if (key === 'Enter' && currentGuess.length === 5) {
+    } else if (key === 'Enter' && currentGuess.length === 5) {
       setGuessCount(guessCount + 1);
     }
   };
@@ -49,11 +47,12 @@ function Board({ guesses, setGuesses, guessCount, setGuessCount }: BoardProps) {
     setGuesses(tempGuesses);
   };
 
-  const createGuess = (word: string) => {
+  const createGuessBlock = (word: string) => {
     const guess = [];
     for (let i = 0; i < 5; i++) {
       guess.push(<CharSquare key={i} char={word.at(i)} />);
     }
+
     return guess;
   };
 
@@ -61,7 +60,7 @@ function Board({ guesses, setGuesses, guessCount, setGuessCount }: BoardProps) {
     <div className='board'>
       {guesses.map((guess, i) => (
         <div className='guess' key={i}>
-          {createGuess(guess)}
+          {createGuessBlock(guess)}
         </div>
       ))}
     </div>
