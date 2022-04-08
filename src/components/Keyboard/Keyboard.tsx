@@ -1,4 +1,5 @@
 import React, { useEffect, Dispatch, SetStateAction } from 'react';
+import useAllowedWords from '../../hooks/useAllowedWords';
 import './Keyboard.scss';
 
 interface KeyboardProps {
@@ -22,6 +23,7 @@ function Keyboard({
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter', 'Backspace']
   ];
+  const isValidWord = useAllowedWords();
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyboardInput);
@@ -44,7 +46,11 @@ function Keyboard({
   const handleInput = (key: string) => {
     let currentGuess = guesses[guessCount];
 
-    if (key === 'Enter' && currentGuess.length === 5) {
+    if (
+      key === 'Enter' &&
+      currentGuess.length === 5 &&
+      isValidWord(currentGuess)
+    ) {
       validateGuess(currentGuess);
       setGuessCount(guessCount + 1);
     } else if (key === 'Backspace' && currentGuess.length > 0) {

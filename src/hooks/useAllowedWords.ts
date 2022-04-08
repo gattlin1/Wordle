@@ -4,11 +4,15 @@ import { allowedWordsList } from '../word-list/allowed-words';
 function useAllowedWords() {
   const [allowedWords, setAllowedWords] = useState(['']);
 
+  const isValidWord = (word: string) => {
+    return allowedWords.includes(word.toLowerCase());
+  };
+
   useEffect(() => {
     setAllowedWords(allowedWordsList);
   }, []);
 
-  return allowedWords;
+  return isValidWord;
 }
 
 export default useAllowedWords;

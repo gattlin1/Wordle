@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.scss';
 import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
+import Modal from './components/UI/Modal/Modal';
 import useAnswerValidator from './hooks/useAnswerValidator';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       <div className='keyboard-container'>
         <Keyboard {...gameState} />
       </div>
+      <Modal />
     </div>
   );
 }
