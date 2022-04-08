@@ -4,12 +4,32 @@ import './Board.scss';
 
 interface BoardProps {
   guesses: string[];
+  exactMatches: boolean[][];
+  relativeMatches: boolean[][];
 }
-function Board({ guesses }: BoardProps) {
-  const createGuessBlock = (word: string) => {
+
+function Board({ guesses, exactMatches, relativeMatches }: BoardProps) {
+  const createGuessBlock = (word: string, guessCount: number) => {
     const guess = [];
     for (let i = 0; i < 5; i++) {
-      guess.push(<CharSquare key={i} char={word.at(i)} />);
+      let squareClass = '';
+      if (
+        relativeMatches[guessCount] &&
+        relativeMatches[guessCount][i] !== undefined
+      ) {
+        if (relativeMatches[guessCount][i]) squareClass = 'relative';
+      }
+
+      if (
+        exactMatches[guessCount] &&
+        exactMatches[guessCount][i] !== undefined
+      ) {
+        if (exactMatches[guessCount][i]) squareClass = 'exact';
+      }
+
+      guess.push(
+        <CharSquare className={squareClass} key={i} char={word.at(i)} />
+      );
     }
 
     return guess;
@@ -19,7 +39,7 @@ function Board({ guesses }: BoardProps) {
     <div className='board'>
       {guesses.map((guess, i) => (
         <div className='guess' key={i}>
-          {createGuessBlock(guess)}
+          {createGuessBlock(guess, i)}
         </div>
       ))}
     </div>

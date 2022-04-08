@@ -6,6 +6,7 @@ interface KeyboardProps {
   setGuesses: Dispatch<SetStateAction<string[]>>;
   guessCount: number;
   setGuessCount: Dispatch<SetStateAction<number>>;
+  validateGuess: (guess: string) => void;
 }
 
 function Keyboard({
@@ -13,6 +14,7 @@ function Keyboard({
   setGuesses,
   guessCount,
   setGuessCount,
+  validateGuess,
 }: KeyboardProps) {
   // prettier-ignore
   const keyboardKeys = [
@@ -43,6 +45,7 @@ function Keyboard({
     let currentGuess = guesses[guessCount];
 
     if (key === 'Enter' && currentGuess.length === 5) {
+      validateGuess(currentGuess);
       setGuessCount(guessCount + 1);
     } else if (key === 'Backspace' && currentGuess.length > 0) {
       currentGuess = currentGuess.slice(0, -1);
@@ -70,8 +73,7 @@ function Keyboard({
     if (key === 'Backspace') {
       kbkey = <i id='backspace' className='fa-solid fa-delete-left'></i>;
       keyClasses.push('backspace');
-    }
-    if (key === 'Enter') {
+    } else if (key === 'Enter') {
       kbkey = <i id='enter'>{key}</i>;
       keyClasses.push('enter');
     }
