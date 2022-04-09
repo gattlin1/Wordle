@@ -1,4 +1,4 @@
-import React, { useEffect, Dispatch, SetStateAction, useState } from 'react';
+import React, { useEffect, Dispatch, SetStateAction } from 'react';
 import useAllowedWords from '../../hooks/useAllowedWords';
 import './Keyboard.scss';
 
@@ -9,6 +9,9 @@ interface KeyboardProps {
   setGuessCount: Dispatch<SetStateAction<number>>;
   exactMatches: boolean[][];
   relativeMatches: boolean[][];
+  exactMatchKeys: string[];
+  relativeMatchKeys: string[];
+  noMatchKeys: string[];
   validateGuess: (guess: string) => void;
 }
 
@@ -19,6 +22,9 @@ function Keyboard({
   setGuessCount,
   exactMatches,
   relativeMatches,
+  exactMatchKeys,
+  relativeMatchKeys,
+  noMatchKeys,
   validateGuess,
 }: KeyboardProps) {
   // prettier-ignore
@@ -28,9 +34,6 @@ function Keyboard({
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Enter', 'Backspace']
   ];
   const isValidWord = useAllowedWords();
-  const [relativeKeys, setRelativeKeys] = useState<string[]>([]);
-  const [exactKeys, setExactKeys] = useState<string[]>([]);
-  const [noMatchKeys, setNoMatchKeys] = useState<string[]>([]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyboardInput);
@@ -83,10 +86,10 @@ function Keyboard({
     let kbkey = <i>{key}</i>;
     let keyClasses = ['key'];
 
-    if (relativeKeys.includes(key)) {
-      keyClasses.push('relative');
-    } else if (exactKeys.includes(key)) {
+    if (exactMatchKeys.includes(key)) {
       keyClasses.push('exact');
+    } else if (relativeMatchKeys.includes(key)) {
+      keyClasses.push('relative');
     } else if (noMatchKeys.includes(key)) {
       keyClasses.push('no-match');
     }
@@ -98,6 +101,7 @@ function Keyboard({
       kbkey = <i id='enter'>{key}</i>;
       keyClasses.push('enter');
     }
+
     return (
       <div
         className={keyClasses.join(' ')}
@@ -107,47 +111,6 @@ function Keyboard({
         {kbkey}
       </div>
     );
-  };
-
-  const getRelativeKeys = () => {
-    const tempRelKeys: string[] = [];
-
-    relativeMatches.forEach((relativeGuess, i) => {
-      relativeGuess.forEach((isRelativeMatch, j) => {
-        if (isRelativeMatch) {
-          tempRelKeys.push(guesses[i][j]);
-        }
-      });
-    });
-
-    setRelativeKeys(tempRelKeys);
-  };
-
-  const getExactKeys = () => {
-    const tempExactKeys: string[] = [];
-
-    exactMatches.forEach((exactGuess, i) => {
-      exactGuess.forEach((isExactMatch, j) => {
-        if (isExactMatch) {
-          tempExactKeys.push(guesses[i][j]);
-        }
-      });
-    });
-
-    setExactKeys(tempExactKeys);
-  };
-
-  const getNoMatchKeys = () => {
-    const tempNoMatchKeys: string[] = [];
-    const guessKeys = guesses.flat().join('');
-
-    for (let key of guessKeys) {
-      if (!exactKeys.includes(key) && !relativeKeys.includes(key)) {
-        tempNoMatchKeys.push(key);
-      }
-    }
-
-    setNoMatchKeys(tempNoMatchKeys);
   };
 
   return (

@@ -1,5 +1,7 @@
+@import '../../../variables.scss';
+
 .CharSquare {
-  background-color: #2d4263;
+  background-color: $dark-blue;
   color: white;
   margin: 5px;
   padding: 5px;
@@ -10,9 +12,9 @@
 }
 
 .exact {
-  background-color: #538d4e;
+  background-color: $green;
 }
 
 .relative {
-  background-color: #b59f3b;
+  background-color: $yellow;
 }

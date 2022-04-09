@@ -8,7 +8,14 @@ import useAnswerValidator from './hooks/useAnswerValidator';
 function App() {
   const [guesses, setGuesses] = useState(['', '', '', '', '']);
   const [guessCount, setGuessCount] = useState(0);
-  const { exactMatches, relativeMatches, validateGuess } = useAnswerValidator();
+  const {
+    exactMatches,
+    relativeMatches,
+    exactMatchKeys,
+    relativeMatchKeys,
+    noMatchKeys,
+    validateGuess,
+  } = useAnswerValidator();
   const gameState = {
     guesses: guesses,
     setGuesses: setGuesses,
@@ -16,6 +23,9 @@ function App() {
     setGuessCount: setGuessCount,
     exactMatches: exactMatches,
     relativeMatches: relativeMatches,
+    exactMatchKeys: exactMatchKeys,
+    relativeMatchKeys: relativeMatchKeys,
+    noMatchKeys: noMatchKeys,
     validateGuess: validateGuess,
   };
 
