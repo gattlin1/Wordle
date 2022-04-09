@@ -11,6 +11,8 @@ interface KeyboardProps {
   presentKeys: string[];
   absentKeys: string[];
   validateGuess: (guess: string) => void;
+  showIncorrectWordModal: () => void;
+  showGameOverModal: () => void;
 }
 
 function Keyboard({
@@ -22,6 +24,8 @@ function Keyboard({
   presentKeys,
   absentKeys,
   validateGuess,
+  showIncorrectWordModal,
+  showGameOverModal,
 }: KeyboardProps) {
   // prettier-ignore
   const keyboardKeys = [
@@ -54,9 +58,16 @@ function Keyboard({
 
     switch (key) {
       case 'Enter':
-        if (currentGuess.length === 5 && isValidWord(currentGuess)) {
+        const newGuessCount = guessCount + 1;
+        if (!isValidWord(currentGuess)) {
+          showIncorrectWordModal();
+        } else if (currentGuess.length === 5) {
           validateGuess(currentGuess);
-          setGuessCount(guessCount + 1);
+          setGuessCount(newGuessCount);
+
+          if (newGuessCount === 5) {
+            showGameOverModal();
+          }
         }
         break;
       case 'Backspace':
@@ -104,13 +115,13 @@ function Keyboard({
     }
 
     return (
-      <div
+      <button
         className={keyClasses.join(' ')}
         onClick={() => handleInput(key)}
         key={key}
       >
         {kbkey}
-      </div>
+      </button>
     );
   };
 
