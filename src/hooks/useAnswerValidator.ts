@@ -3,63 +3,63 @@ import { possibleAnswers } from '../word-list/possible-answers';
 
 function useAnswerValidator() {
   const [answer, setAnswer] = useState('');
-  const [exactMatches, setExactMatches] = useState<boolean[][]>([]);
-  const [relativeMatches, setRelativeMatches] = useState<boolean[][]>([]);
-  const [exactMatchKeys, setExactMatchKeys] = useState<string[]>([]);
-  const [relativeMatchKeys, setRelativeMatchKeys] = useState<string[]>([]);
-  const [noMatchKeys, setNoMatchKeys] = useState<string[]>([]);
+  const [correctIndices, setCorrectIndices] = useState<boolean[][]>([]);
+  const [presentIndices, setPresentIndices] = useState<boolean[][]>([]);
+  const [correctKeys, setCorrectKeys] = useState<string[]>([]);
+  const [presentKeys, setPresentKeys] = useState<string[]>([]);
+  const [absentKeys, setAbsentKeys] = useState<string[]>([]);
 
   const validateGuess = (guess: string) => {
-    const exactMatchIndicdes: boolean[] = [];
-    const relativeMatchIndices: boolean[] = [];
-    const exactKeys: string[] = [];
-    const relativeKeys: string[] = [];
-    let potentialRelMatches: string[] = [];
+    const newCorrectIndicdes: boolean[] = [];
+    const newPresentIndices: boolean[] = [];
+    const correctKeys: string[] = [];
+    const presentKeys: string[] = [];
+    let potentiallyPresent: string[] = [];
 
     guess.split('').forEach((char, i) => {
       if (char === answer.at(i)?.toUpperCase()) {
-        exactMatchIndicdes.push(true);
-        exactKeys.push(char);
+        newCorrectIndicdes.push(true);
+        correctKeys.push(char);
       } else {
-        exactMatchIndicdes.push(false);
-        potentialRelMatches.push(answer[i]);
+        newCorrectIndicdes.push(false);
+        potentiallyPresent.push(answer[i]);
       }
     });
 
     guess.split('').forEach((char, i) => {
       if (
-        potentialRelMatches.includes(char.toLowerCase()) &&
-        !exactMatchIndicdes[i]
+        potentiallyPresent.includes(char.toLowerCase()) &&
+        !newCorrectIndicdes[i]
       ) {
-        relativeMatchIndices.push(true);
-        relativeKeys.push(char);
+        newPresentIndices.push(true);
+        presentKeys.push(char);
       } else {
-        relativeMatchIndices.push(false);
+        newPresentIndices.push(false);
       }
     });
 
     guess.split('').forEach((char, i) => {
-      if (!exactKeys.includes(char) && !relativeKeys.includes(char)) {
-        noMatchKeys.push(char);
+      if (!correctKeys.includes(char) && !presentKeys.includes(char)) {
+        absentKeys.push(char);
       }
     });
 
-    const tempExactMatches = exactMatches.slice();
-    const tempRelativeMatches = relativeMatches.slice();
-    tempExactMatches.push(exactMatchIndicdes);
-    tempRelativeMatches.push(relativeMatchIndices);
-    setExactMatches(tempExactMatches);
-    setRelativeMatches(tempRelativeMatches);
+    const tempCorrectMatches = correctIndices.slice();
+    const tempPresentMatches = presentIndices.slice();
+    tempCorrectMatches.push(newCorrectIndicdes);
+    tempPresentMatches.push(newPresentIndices);
+    setCorrectIndices(tempCorrectMatches);
+    setPresentIndices(tempPresentMatches);
 
-    const tempExactKeys = exactMatchKeys.slice();
-    const tempRelKeys = relativeMatchKeys.slice();
-    const tempNoMatchKeys = noMatchKeys.slice();
-    tempExactKeys.push(...exactKeys);
-    tempRelKeys.push(...relativeKeys);
-    tempNoMatchKeys.push(...noMatchKeys);
-    setExactMatchKeys(tempExactKeys);
-    setRelativeMatchKeys(tempRelKeys);
-    setNoMatchKeys(tempNoMatchKeys);
+    const tempCorrectKeys = correctKeys.slice();
+    const tempPresentKeys = presentKeys.slice();
+    const tempabsentKeys = absentKeys.slice();
+    tempCorrectKeys.push(...correctKeys);
+    tempPresentKeys.push(...presentKeys);
+    tempabsentKeys.push(...absentKeys);
+    setCorrectKeys(tempCorrectKeys);
+    setPresentKeys(tempPresentKeys);
+    setAbsentKeys(tempabsentKeys);
   };
 
   useEffect(() => {
@@ -69,11 +69,11 @@ function useAnswerValidator() {
   }, []);
 
   return {
-    exactMatches,
-    relativeMatches,
-    exactMatchKeys,
-    relativeMatchKeys,
-    noMatchKeys,
+    correctIndices,
+    presentIndices,
+    correctKeys,
+    presentKeys,
+    absentKeys,
     validateGuess,
   };
 }

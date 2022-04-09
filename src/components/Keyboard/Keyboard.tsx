@@ -7,11 +7,9 @@ interface KeyboardProps {
   setGuesses: Dispatch<SetStateAction<string[]>>;
   guessCount: number;
   setGuessCount: Dispatch<SetStateAction<number>>;
-  exactMatches: boolean[][];
-  relativeMatches: boolean[][];
-  exactMatchKeys: string[];
-  relativeMatchKeys: string[];
-  noMatchKeys: string[];
+  correctKeys: string[];
+  presentKeys: string[];
+  absentKeys: string[];
   validateGuess: (guess: string) => void;
 }
 
@@ -20,11 +18,9 @@ function Keyboard({
   setGuesses,
   guessCount,
   setGuessCount,
-  exactMatches,
-  relativeMatches,
-  exactMatchKeys,
-  relativeMatchKeys,
-  noMatchKeys,
+  correctKeys,
+  presentKeys,
+  absentKeys,
   validateGuess,
 }: KeyboardProps) {
   // prettier-ignore
@@ -56,23 +52,22 @@ function Keyboard({
   const handleInput = (key: string) => {
     let currentGuess = guesses[guessCount];
 
-    if (
-      key === 'Enter' &&
-      currentGuess.length === 5 &&
-      isValidWord(currentGuess)
-    ) {
-      validateGuess(currentGuess);
-      setGuessCount(guessCount + 1);
-    } else if (key === 'Backspace' && currentGuess.length > 0) {
-      currentGuess = currentGuess.slice(0, -1);
-      updateGuesses(currentGuess);
-    } else if (
-      key !== 'Enter' &&
-      key !== 'Backspace' &&
-      currentGuess.length < 5
-    ) {
-      currentGuess += key;
-      updateGuesses(currentGuess);
+    switch (key) {
+      case 'Enter':
+        if (currentGuess.length === 5 && isValidWord(currentGuess)) {
+          validateGuess(currentGuess);
+          setGuessCount(guessCount + 1);
+        }
+        break;
+      case 'Backspace':
+        currentGuess = currentGuess.slice(0, -1);
+        updateGuesses(currentGuess);
+        break;
+      default:
+        if (currentGuess.length < 5) {
+          currentGuess += key;
+          updateGuesses(currentGuess);
+        }
     }
   };
 
@@ -82,23 +77,29 @@ function Keyboard({
     setGuesses(tempGuesses);
   };
 
-  const createKeyboardKey = (key: string) => {
-    let kbkey = <i>{key}</i>;
-    let keyClasses = ['key'];
+  const handleKeyStatus = (key: string) => {
+    let statusClass = '';
 
-    if (exactMatchKeys.includes(key)) {
-      keyClasses.push('exact');
-    } else if (relativeMatchKeys.includes(key)) {
-      keyClasses.push('relative');
-    } else if (noMatchKeys.includes(key)) {
-      keyClasses.push('no-match');
+    if (correctKeys.includes(key)) {
+      statusClass = 'exact';
+    } else if (presentKeys.includes(key)) {
+      statusClass = 'relative';
+    } else if (absentKeys.includes(key)) {
+      statusClass = 'no-match';
     }
 
+    return statusClass;
+  };
+
+  const createKeyboardKey = (key: string) => {
+    let kbkey = <i>{key}</i>;
+    const keyClasses = ['key'];
+    keyClasses.push(handleKeyStatus(key));
+
     if (key === 'Backspace') {
-      kbkey = <i id='backspace' className='fa-solid fa-delete-left'></i>;
+      kbkey = <i className='fa-solid fa-delete-left'></i>;
       keyClasses.push('backspace');
     } else if (key === 'Enter') {
-      kbkey = <i id='enter'>{key}</i>;
       keyClasses.push('enter');
     }
 

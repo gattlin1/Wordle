@@ -9,11 +9,11 @@ function App() {
   const [guesses, setGuesses] = useState(['', '', '', '', '']);
   const [guessCount, setGuessCount] = useState(0);
   const {
-    exactMatches,
-    relativeMatches,
-    exactMatchKeys,
-    relativeMatchKeys,
-    noMatchKeys,
+    correctIndices,
+    presentIndices,
+    correctKeys,
+    presentKeys,
+    absentKeys,
     validateGuess,
   } = useAnswerValidator();
   const gameState = {
@@ -21,11 +21,9 @@ function App() {
     setGuesses: setGuesses,
     guessCount: guessCount,
     setGuessCount: setGuessCount,
-    exactMatches: exactMatches,
-    relativeMatches: relativeMatches,
-    exactMatchKeys: exactMatchKeys,
-    relativeMatchKeys: relativeMatchKeys,
-    noMatchKeys: noMatchKeys,
+    correctKeys: correctKeys,
+    presentKeys: presentKeys,
+    absentKeys: absentKeys,
     validateGuess: validateGuess,
   };
 
@@ -35,8 +33,9 @@ function App() {
       <div className='board-container'>
         <Board
           guesses={guesses}
-          exactMatches={exactMatches}
-          relativeMatches={relativeMatches}
+          guessCount={guessCount}
+          correctIndices={correctIndices}
+          presentIndices={presentIndices}
         />
       </div>
       <div className='keyboard-container'>

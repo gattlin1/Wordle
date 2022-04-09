@@ -4,27 +4,35 @@ import './Board.scss';
 
 interface BoardProps {
   guesses: string[];
-  exactMatches: boolean[][];
-  relativeMatches: boolean[][];
+  guessCount: number;
+  correctIndices: boolean[][];
+  presentIndices: boolean[][];
 }
 
-function Board({ guesses, exactMatches, relativeMatches }: BoardProps) {
-  const createGuessBlock = (word: string, guessCount: number) => {
+function Board({
+  guesses,
+  guessCount,
+  correctIndices,
+  presentIndices,
+}: BoardProps) {
+  const createGuessBlock = (word: string, currentRow: number) => {
     const guess = [];
     for (let i = 0; i < 5; i++) {
       let squareClass = '';
-      if (
-        relativeMatches[guessCount] &&
-        relativeMatches[guessCount][i] !== undefined
-      ) {
-        if (relativeMatches[guessCount][i]) squareClass = 'relative';
-      }
 
-      if (
-        exactMatches[guessCount] &&
-        exactMatches[guessCount][i] !== undefined
-      ) {
-        if (exactMatches[guessCount][i]) squareClass = 'exact';
+      if (guessCount > currentRow) {
+        const present =
+          presentIndices[currentRow] && presentIndices[currentRow][i];
+        const correct =
+          correctIndices[currentRow] && correctIndices[currentRow][i];
+
+        if (correct) {
+          squareClass = 'correct';
+        } else if (present) {
+          squareClass = 'present';
+        } else {
+          squareClass = 'absent';
+        }
       }
 
       guess.push(

@@ -11,10 +11,14 @@
   font-weight: 500;
 }
 
-.exact {
+.correct {
   background-color: $green;
 }
 
-.relative {
+.present {
   background-color: $yellow;
+}
+
+.absent {
+  background-color: $gray;
 }
