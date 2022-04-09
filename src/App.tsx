@@ -14,6 +14,8 @@ function App() {
     setGuesses: setGuesses,
     guessCount: guessCount,
     setGuessCount: setGuessCount,
+    exactMatches: exactMatches,
+    relativeMatches: relativeMatches,
     validateGuess: validateGuess,
   };
 
